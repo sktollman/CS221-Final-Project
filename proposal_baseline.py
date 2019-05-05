@@ -1,4 +1,6 @@
+import argparse
 from collections import namedtuple
+from cmd import Cmd
 import csv
 import nltk
 nltk.download('wordnet', quiet=True)
@@ -26,36 +28,32 @@ def find_synonyms(word):
             synonyms.append(l.name())
     return synonyms
 
-def shakespeare_synonym(word):
-    synonyms = find_synonyms(word)
-    shakespeare_synonyms = \
-        [(w, c) for w, c in word_counts.items() if w in synonyms]
-
-    # if no matches in shakespearean text, use original word
-    if not shakespeare_synonyms: return word
-
-    shakespeare_synonyms = \
-        sorted(shakespeare_synonyms, key=lambda x: x[1], reverse=True)
-
-    # if the top match is the same as the original word, use the second best
-    # match
-    if shakespeare_synonyms[0][0] == word and len(shakespeare_synonyms) > 1:
-        return shakespeare_synonyms[1][0]
-
-    return shakespeare_synonyms[0][0]
-
 def all_shakespeare_synonmys(word):
     synonyms = find_synonyms(word)
-    shakespeare_synonyms = \
-        [w for w, c in word_counts.items() if w in synonyms]
+    shakespeare_synonyms = [w for w in word_counts if w in synonyms]
     # if no matches in shakespearean text, use original word
     if not shakespeare_synonyms: shakespeare_synonyms = [word]
     return shakespeare_synonyms
 
+def shakespeare_synonym(word):
+    shakespeare_synonyms = sorted(all_shakespeare_synonmys(word),
+        key=lambda w: word_counts[w] if w in word_counts else 0, reverse=True)
+
+    # if the top match is the same as the original word, use the second best
+    # match
+    if shakespeare_synonyms[0] == word and len(shakespeare_synonyms) > 1:
+        return shakespeare_synonyms[1]
+
+    return shakespeare_synonyms[0]
+
+cache = dict()
+
 def sentence_fluency(words):
-    result = bigram_model(shakespeare_fluency.SENTENCE_BEGIN, words[0])
-    for i in range(len(words) - 1):
-        result += bigram_model(words[i], words[i+1])
+    if len(words) <= 1: return 0
+    words = tuple(words)
+    if words in cache: return cache[words]
+    result = bigram_model(words[0], words[1]) + sentence_fluency(words[2:])
+    cache[words] = result
     return result
 
 def translate_to_shakespeare(sentence):
@@ -73,54 +71,10 @@ def translate_to_shakespeare(sentence):
             y.append(x)
             populate(y, remaining[1:])
 
-    populate([], possibilities)
+    populate([shakespeare_fluency.SENTENCE_BEGIN], possibilities)
 
-    # print(possible_sentences)
     m = max(possible_sentences, key=sentence_fluency)
-    # print(m)
-    return ' '.join(m)
-
-SENTENCES = [
-"""
-Horatio says we’re imagining it,
-and won’t let himself believe anything about
-this horrible thing that we’ve seen twice now.
-That’s why I’ve begged him
-to come on our shift tonight,
-so that if the ghost appears
-he can see what we see and speak to it.
-""",
-"""
-What’s going on, Horatio? You’re pale and trembling.
-You agree now that we’re not imagining this, don’t you?
-What do you think about it?
-""",
-"""
-Wait, look! It has come again.
-I’ll meet it if it’s the last thing I do. —Stay here, you hallucination!
-"""
-]
-
-ORIGINALS = [
-"""
-Horatio says ‘tis but our fantasy
-And will not let belief take hold of him
-Touching this dreaded sight twice seen of us.
-Therefore I have entreated him along
-With us to watch the minutes of this night,
-That if again this apparition come
-He may approve our eyes and speak to it.
-""",
-"""
-How now, Horatio? You tremble and look pale.
-Is not this something more than fantasy?
-What think you on ’t?
-""",
-"""
-But soft, behold! Lo, where it comes again.
-I’ll cross it though it blast me.—Stay, illusion!
-"""
-]
+    return ' '.join(m[1:])
 
 def run_models(sentence):
      # unigram frequency model
@@ -131,16 +85,21 @@ def run_models(sentence):
     fluency = translate_to_shakespeare(sentence)
     print('Unigram model + bigram sentence fluency: {}'.format(fluency))
 
-# create --shell option
 
-# 1. output of those 3 sentences
-# 2. screenshot of interactive shell
-# 3. push to github
-# 4. create paragraph from baseline
+SENTENCES = [
+    """You agree now that we’re not imagining this, don’t you?""",
+    """I’ll meet it if it’s the last thing I do.""",
+    """That’s why I’ve begged him to come on our shift tonight"""
+]
 
-from cmd import Cmd
+ORIGINALS = [
+    """Is not this something more than fantasy?""",
+    """I’ll cross it though it blast me.""",
+    """Therefore I have entreated him along
+    With us to watch the minutes of this night"""
+]
 
-class MyPrompt(Cmd):
+class InteractiveTranslation(Cmd):
     prompt = '> '
     intro = "Welcome! Enter a sentence to translate into Shakespeare"
 
@@ -148,27 +107,15 @@ class MyPrompt(Cmd):
         run_models(sentence)
 
 if __name__ == '__main__':
-    for s, o in zip(SENTENCES, ORIGINALS):
-        print('Original Shakespeare:')
-        print(o)
-        print('Translating No Fear translation back to Shakespeare:')
-        print(s)
-        run_models(s)
-    # MyPrompt().cmdloop()
-    # sentence = """
-    # Horatio says we’re imagining it,
-    # and won’t let himself believe anything about
-    # this horrible thing that we’ve seen twice now.
-    # That’s why I’ve begged him
-    # to come on our shift tonight,
-    # so that if the ghost appears
-    # he can see what we see and speak to it.
-    # """
-    # sentence = """
-    # That’s why I’ve begged him to come on our shift tonight
-    # """
-    # sentence = 'today is a good day'
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--shell', action='store_true')
+    args = parser.parse_args()
 
-
-
-
+    if args.shell:
+        InteractiveTranslation().cmdloop()
+    else: # run baseline tests
+        for s, o in zip(SENTENCES, ORIGINALS):
+            print('No Fear: {}'.format(s))
+            print('Original: {}'.format(o))
+            run_models(s)
+            print() # newline
