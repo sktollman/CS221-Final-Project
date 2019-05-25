@@ -5,6 +5,7 @@ import csv
 import nltk
 nltk.download('wordnet', quiet=True)
 from nltk.corpus import wordnet
+from nltk.translate.bleu_score import sentence_bleu, SmoothingFunction
 import shakespeare_fluency
 
 # from https://www.kaggle.com/emmabel/word-occurrences-in-shakespeare
@@ -76,19 +77,25 @@ def translate_to_shakespeare(sentence):
     m = max(possible_sentences, key=sentence_fluency)
     return ' '.join(m[1:])
 
-def run_models(sentence):
+def run_models(sentence, oracle):
      # unigram frequency model
     unigram = ' '.join(map(shakespeare_synonym, sentence.split()))
     print('Unigram frequency model: {}'.format(unigram))
+    score = sentence_bleu([oracle.split()], unigram.split(),
+        smoothing_function=SmoothingFunction().method1)
+    print('Bleu score: {}'.format(round(score, 4)))
 
     # unigram model + bigram sentence fluency
     fluency = translate_to_shakespeare(sentence)
     print('Unigram model + bigram sentence fluency: {}'.format(fluency))
+    score = sentence_bleu([oracle.split()], fluency.split(),
+        smoothing_function=SmoothingFunction().method1)
+    print('Bleu score: {}'.format(round(score,4)))
 
 
 SENTENCES = [
-    """You agree now that we’re not imagining this, don’t you?""",
-    """I’ll meet it if it’s the last thing I do.""",
+    """You agree now that we’re not imagining this, don’t you""",
+    """I’ll meet it if it’s the last thing I do""",
     """That’s why I’ve begged him to come on our shift tonight"""
 ]
 
@@ -117,5 +124,5 @@ if __name__ == '__main__':
         for s, o in zip(SENTENCES, ORIGINALS):
             print('No Fear: {}'.format(s))
             print('Original: {}'.format(o))
-            run_models(s)
+            run_models(s, o)
             print() # newline
