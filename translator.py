@@ -102,8 +102,8 @@ SENTENCES = [
 ORIGINALS = [
     """Is not this something more than fantasy?""",
     """I’ll cross it though it blast me.""",
-    """Therefore I have entreated him along
-    With us to watch the minutes of this night"""
+    """Therefore I have entreated him along""",
+    """With us to watch the minutes of this night"""
 ]
 
 class InteractiveTranslation(Cmd):

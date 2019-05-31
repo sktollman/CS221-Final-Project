@@ -64,13 +64,13 @@ for line in lines[: min(num_samples, len(lines) - 1)]:
     target_text,input_text = line.split('|')
     # We use "tab" as the "start sequence" character
     # for the targets, and "\n" as "end sequence" character.
-    target_text = '\t' + target_text + '\n'
+    target_text = '\t ' + target_text + ' \n'
     input_texts.append(input_text)
     target_texts.append(target_text)
-    for char in input_text:
+    for char in input_text.split():
         if char not in input_characters:
             input_characters.add(char)
-    for char in target_text:
+    for char in target_text.split():
         if char not in target_characters:
             target_characters.add(char)
 
@@ -103,9 +103,9 @@ decoder_target_data = np.zeros(
     dtype='float32')
 
 for i, (input_text, target_text) in enumerate(zip(input_texts, target_texts)):
-    for t, char in enumerate(input_text):
+    for t, char in enumerate(input_text.split()):
         encoder_input_data[i, t, input_token_index[char]] = 1.
-    for t, char in enumerate(target_text):
+    for t, char in enumerate(target_text.split()):
         # decoder_target_data is ahead of decoder_input_data by one timestep
         decoder_input_data[i, t, target_token_index[char]] = 1.
         if t > 0:
