@@ -90,4 +90,4 @@ def score_sentence(sentence="So shaken as we are, so wan with care,",
 
     return result
 
-score_sentence()
+score_sentence(verbose=True)
