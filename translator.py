@@ -7,6 +7,7 @@ nltk.download('wordnet', quiet=True)
 from nltk.corpus import wordnet
 from nltk.translate.bleu_score import sentence_bleu, SmoothingFunction
 import shakespeare_fluency
+import language_model
 
 # from https://www.kaggle.com/emmabel/word-occurrences-in-shakespeare
 FILENAME = 'shakespeare.csv'
@@ -77,21 +78,47 @@ def translate_to_shakespeare(sentence):
     m = max(possible_sentences, key=sentence_fluency)
     return ' '.join(m[1:])
 
+def language_model_translation(sentence):
+    words = sentence.split()
+    possibilities = [all_shakespeare_synonmys(w) for w in words]
+
+    possible_sentences = []
+    def populate(curr, remaining):
+        if not remaining:
+            possible_sentences.append(curr)
+            return
+
+        for x in remaining[0]:
+            y = list(curr)
+            y.append(x)
+            populate(y, remaining[1:])
+
+    populate([shakespeare_fluency.SENTENCE_BEGIN], possibilities)
+
+    # for s in possible_sentences:
+    #     print(language_model.score_sentence(' '.join(s[1:])))
+
+    m = max(possible_sentences,
+        key=lambda words: language_model.score_sentence(' '.join(words[1:])))
+    return ' '.join(m[1:])
+
 def run_models(sentence, oracle):
      # unigram frequency model
     unigram = ' '.join(map(shakespeare_synonym, sentence.split()))
     print('Unigram frequency model: {}'.format(unigram))
-    score = sentence_bleu([oracle.split()], unigram.split(),
-        smoothing_function=SmoothingFunction().method1)
-    print('Bleu score: {}'.format(round(score, 4)))
+    # score = sentence_bleu([oracle.split()], unigram.split(),
+    #     smoothing_function=SmoothingFunction().method1)
+    # print('Bleu score: {}'.format(round(score, 4)))
 
     # unigram model + bigram sentence fluency
     fluency = translate_to_shakespeare(sentence)
     print('Unigram model + bigram sentence fluency: {}'.format(fluency))
-    score = sentence_bleu([oracle.split()], fluency.split(),
-        smoothing_function=SmoothingFunction().method1)
-    print('Bleu score: {}'.format(round(score,4)))
+    # score = sentence_bleu([oracle.split()], fluency.split(),
+    #     smoothing_function=SmoothingFunction().method1)
+    # print('Bleu score: {}'.format(round(score,4)))
 
+    lm = language_model_translation(sentence)
+    print('Unigram model + language model scores: {}'.format(lm))
 
 SENTENCES = [
     """You agree now that we’re not imagining this, don’t you""",

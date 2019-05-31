@@ -2,9 +2,9 @@
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
 from keras.layers import Embedding, LSTM, Dense
-from keras.models import Sequential
+from keras.models import Sequential, load_model
 import numpy as np
-
+import re
 
 def prepare_sentence(seq, maxlen):
     # Pads seq and slides windows
@@ -13,23 +13,19 @@ def prepare_sentence(seq, maxlen):
     for i, w in enumerate(seq):
         x_padded = pad_sequences([seq[:i]],
                                  maxlen=maxlen - 1,
-                                 padding='pre')[0]  # Pads before each sequence
+                                 # Pads before each sequence
+                                 padding='pre')[0]
         x.append(x_padded)
         y.append(w)
     return x, y
 
-
-# Data
-# data = ["Two little dicky birds",
-#         "Sat on a wall,",
-#         "One called Peter,",
-#         "One called Paul.",
-#         "Fly away, Peter,",
-#         "Fly away, Paul!",
-#         "Come back, Peter,",
-#         "Come back, Paul."]
+# TODO: remove punctuation! lower case everything!
 with open('alllines.txt', 'r', encoding='utf-8') as f:
-    data = f.read().split('\n')[1:-1] # remove start and end quotes
+    data = f.read().split('\n')
+    # remove punctuation
+    data = [re.sub(r'[^\w\s]','',d) for d in data]
+    print("len: {}".format(len(data)))
+    data = data[:50]
 
 # Preprocess data
 tokenizer = Tokenizer()
@@ -39,42 +35,59 @@ seqs = tokenizer.texts_to_sequences(data)
 
 # Slide windows over each sentence
 maxlen = max([len(seq) for seq in seqs])
-x = []
-y = []
-for seq in seqs:
-    x_windows, y_windows = prepare_sentence(seq, maxlen)
-    x += x_windows
-    y += y_windows
-x = np.array(x)
-y = np.array(y) - 1
-y = np.eye(len(vocab))[y]  # One hot encoding
 
-# Define model
-model = Sequential()
-model.add(Embedding(input_dim=len(vocab) + 1,  # vocabulary size. Adding an
-                                               # extra element for <PAD> word
-                    output_dim=5,  # size of embeddings
-                    input_length=maxlen - 1))  # length of the padded sequences
-model.add(LSTM(10))
-model.add(Dense(len(vocab), activation='softmax'))
-model.compile('rmsprop', 'categorical_crossentropy')
+def create_model():
+    x = []
+    y = []
+    for seq in seqs:
+        x_windows, y_windows = prepare_sentence(seq, maxlen)
+        x += x_windows
+        y += y_windows
+    x = np.array(x)
+    y = np.array(y) - 1
+    y = np.eye(len(vocab))[y]  # One hot encoding
 
-# Train network
-model.fit(x, y, epochs=1000)
+    # Define model
+    model = Sequential()
+    model.add(Embedding(input_dim=len(vocab) + 1, # vocabulary size. Adding an
+                                                  # extra element for <PAD> word
+                        output_dim=5,  # size of embeddings
+                        input_length=maxlen - 1)) # length of the padded seqs
+    model.add(LSTM(10))
+    model.add(Dense(len(vocab), activation='softmax'))
+    model.compile('rmsprop', 'categorical_crossentropy')
+
+    # Train network
+    model.fit(x, y, epochs=1000)
+    model.save('model.h5')
+
+    return model
+
+# Only generate model once because it is expensive
+try:
+    model = load_model('model.h5')
+except:
+    model = create_model()
 
 # Compute probability of occurence of a sentence
-sentence = "So shaken as we are, so wan with care,"
-tok = tokenizer.texts_to_sequences([sentence])[0]
-x_test, y_test = prepare_sentence(tok, maxlen)
-x_test = np.array(x_test)
-y_test = np.array(y_test) - 1  # The word <PAD> does not have a class
-p_pred = model.predict(x_test)
-vocab_inv = {v: k for k, v in vocab.items()}
-log_p_sentence = 0
-for i, prob in enumerate(p_pred):
-    word = vocab_inv[y_test[i]+1]  # Index 0 from vocab is reserved to <PAD>
-    history = ' '.join([vocab_inv[w] for w in x_test[i, :] if w != 0])
-    prob_word = prob[y_test[i]]
-    log_p_sentence += np.log(prob_word)
-    print('P(w={}|h={})={}'.format(word, history, prob_word))
-print('Prob. sentence: {}'.format(np.exp(log_p_sentence)))
+def score_sentence(sentence="So shaken as we are, so wan with care,",
+    verbose=False):
+    tok = tokenizer.texts_to_sequences([sentence])[0]
+    x_test, y_test = prepare_sentence(tok, maxlen)
+    x_test = np.array(x_test)
+    y_test = np.array(y_test) - 1  # The word <PAD> does not have a class
+    p_pred = model.predict(x_test)
+    vocab_inv = {v: k for k, v in vocab.items()}
+    log_p_sentence = 0
+    for i, prob in enumerate(p_pred):
+        word = vocab_inv[y_test[i]+1]  # Index 0 from vocab is reserved to <PAD>
+        history = ' '.join([vocab_inv[w] for w in x_test[i, :] if w != 0])
+        prob_word = prob[y_test[i]]
+        log_p_sentence += np.log(prob_word)
+        if verbose: print('P(w={}|h={})={}'.format(word, history, prob_word))
+    result = np.exp(log_p_sentence)
+    if verbose: print('Prob. sentence: {}'.format(result))
+
+    return result
+
+score_sentence()
