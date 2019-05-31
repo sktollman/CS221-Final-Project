@@ -19,13 +19,12 @@ def prepare_sentence(seq, maxlen):
         y.append(w)
     return x, y
 
-# TODO: remove punctuation! lower case everything!
+# removes punctuation and converts to lowercase
+def normalize_sentence(s):
+    return re.sub(r'[^\w\s]','',s).lower()
+
 with open('alllines.txt', 'r', encoding='utf-8') as f:
-    data = f.read().split('\n')
-    # remove punctuation
-    data = [re.sub(r'[^\w\s]','',d) for d in data]
-    print("len: {}".format(len(data)))
-    data = data[:50]
+    data = list(map(normalize_sentence, f.read().split('\n')))
 
 # Preprocess data
 tokenizer = Tokenizer()
@@ -72,6 +71,7 @@ except:
 # Compute probability of occurence of a sentence
 def score_sentence(sentence="So shaken as we are, so wan with care,",
     verbose=False):
+    sentence = normalize_sentence(sentence)
     tok = tokenizer.texts_to_sequences([sentence])[0]
     x_test, y_test = prepare_sentence(tok, maxlen)
     x_test = np.array(x_test)
