@@ -32,14 +32,17 @@ class TranslationProblem(search_util.SearchProblem):
         self.costFn = costFn
 
     def startState(self):
-        return ()
+        return (shakespeare_fluency.SENTENCE_BEGIN,)
 
     def isEnd(self, state):
-        return len(state) == len(self.query)
+        return len(state) == (len(self.query) + 1)
 
     def succAndCost(self, state):
-        nextWord = self.query[len(state)]
+        nextWord = self.query[len(state) - 1]
         synonyms = self.synonymGenerator(nextWord)
+
+        # print(state)
+        # print(nextWord)
 
         results = []
         for s in synonyms:
@@ -197,9 +200,9 @@ if __name__ == '__main__':
             print('Language model translation: {}'.format(res))
 
             print('Word vector synoynms:')
-            res = translate(s, synoynms.shakes_synonym, sentence_fluency)
+            res = translate(s, synonyms.shakes_synonym, sentence_fluency)
             print('Bigram translation: {}'.format(res))
-            res = translate(s, synoynms.shakes_synonym,
+            res = translate(s, synonyms.shakes_synonym,
                 lambda words: language_model.score_sentence(' '.join(words[1:])))
             print('Language model translation: {}'.format(res))
             print()
