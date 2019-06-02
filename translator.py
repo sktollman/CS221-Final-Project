@@ -8,6 +8,8 @@ from nltk.corpus import wordnet
 from nltk.translate.bleu_score import sentence_bleu, SmoothingFunction
 import shakespeare_fluency
 import language_model
+import synonyms
+import search_util
 
 # from https://www.kaggle.com/emmabel/word-occurrences-in-shakespeare
 FILENAME = 'shakespeare.csv'
@@ -22,6 +24,39 @@ def read_file():
         return word_counts
 
 word_counts = read_file()
+
+class TranslationProblem(search_util.SearchProblem):
+    def __init__(self, query, synonymGenerator, costFn):
+        self.query = query.split()
+        self.synonymGenerator = synonymGenerator
+        self.costFn = costFn
+
+    def startState(self):
+        return ()
+
+    def isEnd(self, state):
+        return len(state) == len(self.query)
+
+    def succAndCost(self, state):
+        nextWord = self.query[len(state)]
+        synonyms = self.synonymGenerator(nextWord)
+
+        results = []
+        for s in synonyms:
+            newState = list(state)
+            newState.append(s)
+            results.append((s, tuple(newState), self.costFn(newState)))
+
+        return results
+
+def translate(query, synonymGenerator, scorer):
+    if len(query) == 0:
+        return ''
+
+    ucs = search_util.UniformCostSearch(verbose=0)
+    ucs.solve(TranslationProblem(query, synonymGenerator, scorer))
+
+    return ' '.join(list(ucs.actions))
 
 def find_synonyms(word):
     synonyms = []
@@ -58,9 +93,9 @@ def sentence_fluency(words):
     cache[words] = result
     return result
 
-def translate_to_shakespeare(sentence):
+def translate_to_shakespeare(sentence, synonym_generator):
     words = sentence.split()
-    possibilities = [all_shakespeare_synonmys(w) for w in words]
+    possibilities = [synonym_generator(w) for w in words]
 
     possible_sentences = []
     def populate(curr, remaining):
@@ -78,9 +113,9 @@ def translate_to_shakespeare(sentence):
     m = max(possible_sentences, key=sentence_fluency)
     return ' '.join(m[1:])
 
-def language_model_translation(sentence):
+def language_model_translation(sentence, synonym_generator):
     words = sentence.split()
-    possibilities = [all_shakespeare_synonmys(w) for w in words]
+    possibilities = [synonym_generator(w) for w in words]
 
     possible_sentences = []
     def populate(curr, remaining):
@@ -102,23 +137,25 @@ def language_model_translation(sentence):
         key=lambda words: language_model.score_sentence(' '.join(words[1:])))
     return ' '.join(m[1:])
 
-def run_models(sentence, oracle):
+def run_models(sentence, oracle, synonym_generator):
      # unigram frequency model
-    unigram = ' '.join(map(shakespeare_synonym, sentence.split()))
+    syn = lambda word: synonym_generator(word)[0]
+    unigram = ' '.join(map(syn, sentence.split()))
     print('Unigram frequency model: {}'.format(unigram))
     # score = sentence_bleu([oracle.split()], unigram.split(),
     #     smoothing_function=SmoothingFunction().method1)
     # print('Bleu score: {}'.format(round(score, 4)))
 
     # unigram model + bigram sentence fluency
-    fluency = translate_to_shakespeare(sentence)
+    fluency = translate_to_shakespeare(sentence, synonym_generator)
     print('Unigram model + bigram sentence fluency: {}'.format(fluency))
     # score = sentence_bleu([oracle.split()], fluency.split(),
     #     smoothing_function=SmoothingFunction().method1)
     # print('Bleu score: {}'.format(round(score,4)))
 
-    lm = language_model_translation(sentence)
+    lm = language_model_translation(sentence, synonym_generator)
     print('Unigram model + language model scores: {}'.format(lm))
+    print('LSTM model score: {}'.format(language_model.score_sentence(lm)))
 
 SENTENCES = [
     """You agree now that we’re not imagining this, don’t you""",
@@ -151,5 +188,24 @@ if __name__ == '__main__':
         for s, o in zip(SENTENCES, ORIGINALS):
             print('No Fear: {}'.format(s))
             print('Original: {}'.format(o))
-            run_models(s, o)
-            print() # newline
+
+            print('NLTK synoynms:')
+            res = translate(s, all_shakespeare_synonmys, sentence_fluency)
+            print('Bigram translation: {}'.format(res))
+            res = translate(s, all_shakespeare_synonmys,
+                lambda words: language_model.score_sentence(' '.join(words[1:])))
+            print('Language model translation: {}'.format(res))
+
+            print('Word vector synoynms:')
+            res = translate(s, synoynms.shakes_synonym, sentence_fluency)
+            print('Bigram translation: {}'.format(res))
+            res = translate(s, synoynms.shakes_synonym,
+                lambda words: language_model.score_sentence(' '.join(words[1:])))
+            print('Language model translation: {}'.format(res))
+            print()
+
+            # print('Using NLTK synonyms:')
+            # run_models(s, o, all_shakespeare_synonmys)
+            # print('Using word vector synoynms:')
+            # run_models(s, o, synonyms.shakes_synonym)
+            # print() # newline
