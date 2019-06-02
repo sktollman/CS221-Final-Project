@@ -48,27 +48,17 @@ def create_model():
     y = np.eye(len(vocab))[y]  # One hot encoding
 
     # Define model
-    # model = Sequential()
-    # model.add(Embedding(input_dim=len(vocab) + 1, # vocabulary size. Adding an
-    #                                               # extra element for <PAD> word
-    #                     output_dim=5,  # size of embeddings
-    #                     input_length=maxlen - 1)) # length of the padded seqs
-    # model.add(LSTM(10))
-    # model.add(Dense(len(vocab), activation='softmax'))
-    # model.compile('rmsprop', 'categorical_crossentropy')
-
     model = Sequential()
-    model.add(Embedding(vocab_size, 10, input_length=max_length-1))
-    model.add(LSTM(50))
-    model.add(Dense(vocab_size, activation='softmax'))
-    print(model.summary())
-    # compile network
-    model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
-    # fit network
-    model.fit(x, y, epochs=500)
+    model.add(Embedding(input_dim=len(vocab) + 1, # vocabulary size. Adding an
+                                                  # extra element for <PAD> word
+                        output_dim=5,  # size of embeddings
+                        input_length=maxlen - 1)) # length of the padded seqs
+    model.add(LSTM(10))
+    model.add(Dense(len(vocab), activation='softmax'))
+    model.compile('rmsprop', 'categorical_crossentropy')
 
     # Train network
-    # model.fit(x, y, epochs=100)
+    model.fit(x, y, epochs=100)
     model.save('model.h5')
 
     return model
