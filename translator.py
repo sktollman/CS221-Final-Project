@@ -97,6 +97,8 @@ def run_models(sentence, oracle):
         syn = lambda word: synonym_generator(word)[0]
         unigram = ' '.join(map(syn, sentence.split()))
         print('Unigram frequency model: {}'.format(unigram))
+        score = language_model.score_sentence(unigram)
+        print('LSTM model score: {}'.format(score))
         # score = sentence_bleu([oracle.split()], unigram.split(),
         #     smoothing_function=SmoothingFunction().method1)
         # print('Bleu score: {}'.format(round(score, 4)))
