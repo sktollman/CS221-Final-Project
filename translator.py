@@ -10,6 +10,7 @@ import shakespeare_fluency
 import language_model
 import synonyms
 import search_util
+from input import SENTENCES, ORIGINALS
 
 # from https://www.kaggle.com/emmabel/word-occurrences-in-shakespeare
 FILENAME = 'shakespeare.csv'
@@ -92,36 +93,21 @@ sentence_scorers = {'Bigram': bigram_sentence_fluency, 'Language Model':
 
 def run_models(sentence, oracle):
     for syn_name, synonym_generator in synonym_generators.items():
-        print('{} synonyms:'.format(syn_name))
+        # print('{} synonyms:'.format(syn_name))
         # unigram frequency model
         syn = lambda word: synonym_generator(word)[0]
         unigram = ' '.join(map(syn, sentence.split()))
-        print('Unigram frequency model: {}'.format(unigram))
         score = language_model.score_sentence(unigram)
-        print('LSTM model score: {}'.format(score))
+        print('{} synonyms, unigram frequency model: {} (LSTM model score: {})'.format(syn_name, unigram, score))
         # score = sentence_bleu([oracle.split()], unigram.split(),
         #     smoothing_function=SmoothingFunction().method1)
         # print('Bleu score: {}'.format(round(score, 4)))
 
         for name, scorer in sentence_scorers.items():
             res = translate(s, synonym_generator, scorer)
-            print('{} translation: {}'.format(name, res))
             score = language_model.score_sentence(res)
-            print('LSTM model score: {}'.format(score))
-        print()
-
-SENTENCES = [
-    """You agree now that we’re not imagining this, don’t you""",
-    """I’ll meet it if it’s the last thing I do""",
-    """That’s why I’ve begged him to come on our shift tonight"""
-]
-
-ORIGINALS = [
-    """Is not this something more than fantasy?""",
-    """I’ll cross it though it blast me.""",
-    """Therefore I have entreated him along""",
-    """With us to watch the minutes of this night"""
-]
+            print('{} synonyms, {} translation: {} (LSTM model score: {})'.format(syn_name, name, res, score))
+        # print()
 
 class InteractiveTranslation(Cmd):
     prompt = '> '
@@ -139,7 +125,7 @@ if __name__ == '__main__':
         InteractiveTranslation().cmdloop()
     else: # run baseline tests
         for s, o in zip(SENTENCES, ORIGINALS):
-            print('No Fear: {}'.format(s))
-            print('Original: {}'.format(o))
+            print('Input (No Fear): {}'.format(s))
+            print('Original Shakespeare: {}'.format(o))
             run_models(s, o)
             print() # newline

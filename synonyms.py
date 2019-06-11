@@ -1,13 +1,19 @@
 import gensim
+import os
 import re
+
+DIR_NAME = 'Training Data'
 
 # removes punctuation, converts to lowercase, and splits into words
 def vectorize_sentence(s):
     return re.sub(r'[^\w\s]','',s).lower().split()
 
 def create_model():
-    with open('alllines.txt', 'r', encoding='utf-8') as f:
-        sentences = list(map(vectorize_sentence, f.read().split('\n')))
+    sentences = []
+    for f_name in os.listdir('Training Data'):
+        if not f_name.endswith('.txt'): continue
+        with open(DIR_NAME + '/' + f_name, 'r', encoding='utf-8') as f:
+            sentences.extend(list(map(vectorize_sentence, f.read().split('\n'))))
 
     model = gensim.models.Word2Vec(sentences)
     model.save('synonyms.pkl')

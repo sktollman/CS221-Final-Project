@@ -77,16 +77,19 @@ def score_sentence(sentence="So shaken as we are, so wan with care,",
     x_test, y_test = prepare_sentence(tok, maxlen)
     x_test = np.array(x_test)
     y_test = np.array(y_test) - 1  # The word <PAD> does not have a class
-    p_pred = model.predict(x_test)
-    vocab_inv = {v: k for k, v in vocab.items()}
-    log_p_sentence = 0
-    for i, prob in enumerate(p_pred):
-        word = vocab_inv[y_test[i]+1]  # Index 0 from vocab is reserved to <PAD>
-        history = ' '.join([vocab_inv[w] for w in x_test[i, :] if w != 0])
-        prob_word = prob[y_test[i]]
-        log_p_sentence += np.log(prob_word)
-        if verbose: print('P(w={}|h={})={}'.format(word, history, prob_word))
-    result = np.exp(log_p_sentence)
+    try:
+        p_pred = model.predict(x_test)
+        vocab_inv = {v: k for k, v in vocab.items()}
+        log_p_sentence = 0
+        for i, prob in enumerate(p_pred):
+            word = vocab_inv[y_test[i]+1]  # Index 0 from vocab is reserved to <PAD>
+            history = ' '.join([vocab_inv[w] for w in x_test[i, :] if w != 0])
+            prob_word = prob[y_test[i]]
+            log_p_sentence += np.log(prob_word)
+            if verbose: print('P(w={}|h={})={}'.format(word, history, prob_word))
+        result = np.exp(log_p_sentence)
+    except:
+        result = 0 # give score of 0 if words don't appear in Shakespeare
     if verbose: print('Prob. sentence: {}'.format(result))
 
     return result

@@ -1,0 +1,135 @@
+Input (No Fear): No need to talk about this anymore, let’s do it.
+Original Shakespeare: No more talking on’t; let it be done: away,
+NLTK synonyms, unigram frequency model: no want to blab almost this anymore, let’s practise it. (LSTM model score: 3.1120462195782225e-42)
+NLTK synonyms, Bigram translation: no ask to talking some this anymore, let’s set it. (LSTM model score: 5.583344957380576e-38)
+NLTK synonyms, Language Model translation: no demand to blab about this anymore, let’s act it. (LSTM model score: 9.126874103323412e-48)
+Word Vector synonyms, unigram frequency model: No doubt unto speak oer a anymore, let’s doe it. (LSTM model score: 1.7228271558210566e-34)
+Word Vector synonyms, Bigram translation: No doubt will serve afore trouble anymore, let’s hearken it. (LSTM model score: 2.92668755217006e-41)
+Word Vector synonyms, Language Model translation: No worship bid abide afore a anymore, let’s answer it. (LSTM model score: 8.710851471285286e-47)
+
+Input (No Fear): No, they’ve almost all calmed down.
+Original Shakespeare: Nay, these are almost thoroughly persuaded;
+NLTK synonyms, unigram frequency model: No, they’ve almost altogether quiet down. (LSTM model score: 6.194770347676094e-37)
+NLTK synonyms, Bigram translation: No, they’ve about entirely calm down. (LSTM model score: 9.418911101602095e-20)
+NLTK synonyms, Language Model translation: No, they’ve nigh altogether calm down. (LSTM model score: 2.192337801426553e-42)
+Word Vector synonyms, unigram frequency model: No, they’ve spent those calmed down. (LSTM model score: 2.199345210754368e-20)
+Word Vector synonyms, Bigram translation: No, they’ve spent number calmed down. (LSTM model score: 6.079188232321541e-27)
+Word Vector synonyms, Language Model translation: No, they’ve gotten many calmed down. (LSTM model score: 6.543053246904384e-22)
+
+Input (No Fear): With these small statements they vented their complaints
+Original Shakespeare: with these shreds They vented their complainings
+NLTK synonyms, unigram frequency model: With these humble affirmation they air their ill (LSTM model score: 2.3235138792362324e-26)
+NLTK synonyms, Bigram translation: With these humble statement they vented their complaint (LSTM model score: 4.539104596169184e-26)
+NLTK synonyms, Language Model translation: With these small command they air their charge (LSTM model score: 2.5862203854521125e-36)
+Word Vector synonyms, unigram frequency model: With those strange statements we vented mens devices (LSTM model score: 4.1607161527694456e-33)
+Word Vector synonyms, Bigram translation: With ladies sometimes statements i vented his effected (LSTM model score: 2.7247987966131505e-40)
+Word Vector synonyms, Language Model translation: With prophets common statements i vented his devices (LSTM model score: 2.3356295540058885e-42)
+
+Input (No Fear): I would only wish to be him.
+Original Shakespeare: I would wish me only he.
+NLTK synonyms, unigram frequency model: single would merely want to equal him. (LSTM model score: 3.2706935295943644e-31)
+NLTK synonyms, Bigram translation: single would entirely regard to exist him. (LSTM model score: 4.210343474465425e-26)
+NLTK synonyms, Language Model translation: i would entirely regard to exist him. (LSTM model score: 2.5847840689723805e-14)
+Word Vector synonyms, unigram frequency model: I could onely confess unto bee him. (LSTM model score: 1.5946883556063475e-24)
+Word Vector synonyms, Bigram translation: I cannot true pay will endure him. (LSTM model score: 2.474424691228705e-25)
+Word Vector synonyms, Language Model translation: I refused due accuse again abide him. (LSTM model score: 1.0163809054214762e-46)
+
+Input (No Fear): You agree now that we’re not imagining this, don’t you
+Original Shakespeare: Is not this something more than fantasy?
+NLTK synonyms, unigram frequency model: You hold directly that we’re non imagine this, don’t you (LSTM model score: 7.316758761312243e-28)
+NLTK synonyms, Bigram translation: You accord immediately that we’re not reckon this, don’t you (LSTM model score: 3.623210131657526e-23)
+NLTK synonyms, Language Model translation: You tally directly that we’re non guess this, don’t you (LSTM model score: 4.1882964470482105e-39)
+Word Vector synonyms, unigram frequency model: You encounter here who we’re never inevitable this, don’t ye (LSTM model score: 2.3482568290740744e-28)
+Word Vector synonyms, Bigram translation: You confirm still wherefore we’re still regulated this, don’t we (LSTM model score: 8.476769422864945e-35)
+Word Vector synonyms, Language Model translation: You tickle alone also we’re alone apparence this, don’t em (LSTM model score: 3.3338049150784994e-50)
+
+Input (No Fear): I’ll meet it if it’s the last thing I do
+Original Shakespeare: I’ll cross it though it blast me.
+NLTK synonyms, unigram frequency model: I’ll touch it if it’s the lastly affair single practise (LSTM model score: 8.803440374980657e-50)
+NLTK synonyms, Bigram translation: I’ll touch it if it’s the close thing one suffice (LSTM model score: 2.5721259774815966e-41)
+NLTK synonyms, Language Model translation: I’ll fitting it if it’s the close affair 1 act (LSTM model score: 3.944343379239335e-45)
+Word Vector synonyms, unigram frequency model: I’ll abide he whether it’s moab first nation I doe (LSTM model score: 5.529466442458776e-53)
+Word Vector synonyms, Bigram translation: I’ll talk she ought it’s heaven seventh question I hearken (LSTM model score: 1.629424026506982e-54)
+Word Vector synonyms, Language Model translation: I’ll abide fit else it’s arthurs astonished creature I answer (LSTM model score: 9.830031802902627e-43)
+
+Input (No Fear): That’s why I’ve begged him to come on our shift tonight
+Original Shakespeare: Therefore I have entreated him along With us to watch the minutes of this night
+NLTK synonyms, unigram frequency model: That’s wherefore I’ve tap him to derive on our shifting tonight (LSTM model score: 3.089071382028961e-31)
+NLTK synonyms, Bigram translation: That’s wherefore I’ve solicit him to follow along our change tonight (LSTM model score: 3.923523908137017e-56)
+NLTK synonyms, Language Model translation: That’s wherefore I’ve beg him to amount along our break tonight (LSTM model score: 9.987912398952976e-53)
+Word Vector synonyms, unigram frequency model: That’s wherefore I’ve odmar them unto go upon ourselves hasten shortly (LSTM model score: 7.15525705420245e-45)
+Word Vector synonyms, Bigram translation: That’s iago I’ve enchanting horse will stand off we confound dot (LSTM model score: 7.112446532916988e-32)
+Word Vector synonyms, Language Model translation: That’s wherefore I’ve ceres caesar again bring behind his churls aboard (LSTM model score: 1.58040353162844e-60)
+
+Input (No Fear): Explaining government affairs always makes me talk excitedly.
+Original Shakespeare: Of government the properties to unfold, Would seem in me to affect speech and discourse;
+NLTK synonyms, unigram frequency model: excuse governance affair constantly cook me blab excitedly. (LSTM model score: 2.4668966921096965e-39)
+NLTK synonyms, Bigram translation: excuse administration affairs always work me mouth excitedly. (LSTM model score: 3.057852831936258e-52)
+NLTK synonyms, Language Model translation: excuse governance affairs always attain me babble excitedly. (LSTM model score: 3.9700805954459816e-50)
+Word Vector synonyms, unigram frequency model: Explaining imagination rights deceived gives him speak excitedly. (LSTM model score: 3.655660360396846e-54)
+Word Vector synonyms, Bigram translation: Explaining imagination stomachs executed keeps yourself serve excitedly. (LSTM model score: 2.242875394704342e-63)
+Word Vector synonyms, Language Model translation: Explaining soveraigns dwellings sanctified maketh yourself serve excitedly. (LSTM model score: 5.403167706987898e-18)
+
+Input (No Fear): How do you think he’ll represent me?
+Original Shakespeare: What figure of us think you he will bear?
+NLTK synonyms, unigram frequency model: How practise you intend he’ll map me? (LSTM model score: 1.2306881314576972e-43)
+NLTK synonyms, Bigram translation: How suffice you reckon he’ll stage me? (LSTM model score: 2.465700296459609e-14)
+NLTK synonyms, Language Model translation: How dress you believe he’ll act me? (LSTM model score: 1.4119681813397295e-35)
+Word Vector synonyms, unigram frequency model: How doe ye believe he’ll encourage me? (LSTM model score: 2.3543999253195107e-20)
+Word Vector synonyms, Bigram translation: How desire we say he’ll handle me? (LSTM model score: 2.2833579046509737e-37)
+Word Vector synonyms, Language Model translation: How consider em believe he’ll apply me? (LSTM model score: 9.519629591218032e-46)
+
+Input (No Fear): Let’s leave together and we'll go figure it out.
+Original Shakespeare: Let us withdraw together, And we may soon our satisfaction have Touching that point.
+NLTK synonyms, unigram frequency model: Let’s farewell together and we'll move frame it out. (LSTM model score: 1.954168997324992e-37)
+NLTK synonyms, Bigram translation: Let’s allow together and we'll fit build it out. (LSTM model score: 1.3841086660371754e-43)
+NLTK synonyms, Language Model translation: Let’s allow together and we'll become anatomy it out. (LSTM model score: 1.7713815975698523e-34)
+Word Vector synonyms, unigram frequency model: Let’s counsel horses then we'll ride monument he out. (LSTM model score: 2.713145501869052e-51)
+Word Vector synonyms, Bigram translation: Let’s hold thither bow we'll flee grain hard out. (LSTM model score: 2.1008686239899785e-35)
+Word Vector synonyms, Language Model translation: Let’s counsel abroad also we'll arise bulk fit out. (LSTM model score: 1.6613733430087244e-77)
+
+Input (No Fear): I’ll accompany you.
+Original Shakespeare: I’ll wait upon your honour.
+NLTK synonyms, unigram frequency model: I’ll company you. (LSTM model score: 2.3044309717715058e-10)
+NLTK synonyms, Bigram translation: I’ll accompany you. (LSTM model score: 1.757158198471616e-14)
+NLTK synonyms, Language Model translation: I’ll accompany you. (LSTM model score: 1.757158198471616e-14)
+Word Vector synonyms, unigram frequency model: I’ll 33oofc you. (LSTM model score: 9.640053689372814e-05)
+Word Vector synonyms, Bigram translation: I’ll 232 you. (LSTM model score: 9.640053689372814e-05)
+Word Vector synonyms, Language Model translation: I’ll forego you. (LSTM model score: 4.7825043103848615e-14)
+
+Input (No Fear): I don’t think you’ve ever been at a table where they said grace.
+Original Shakespeare: for I think thou never wast where grace was said.
+NLTK synonyms, unigram frequency model: single don’t intend you’ve ever equal at a prorogue where they tell grace. (LSTM model score: 1.5886682439763973e-53)
+NLTK synonyms, Bigram translation: 1 don’t reckon you’ve always exist at a remit where they say grace. (LSTM model score: 7.116974811957513e-28)
+NLTK synonyms, Language Model translation: one don’t reckon you’ve ever exist at a remit where they say grace. (LSTM model score: 4.696998168949923e-23)
+Word Vector synonyms, unigram frequency model: I don’t believe you’ve never spoke until another feast wherein we saying grace. (LSTM model score: 1.0397224132147804e-75)
+Word Vector synonyms, Bigram translation: I don’t wish you’ve dead won shut jonas multitude sick i spake grace. (LSTM model score: 5.288410843246351e-75)
+Word Vector synonyms, Language Model translation: I don’t know you’ve life won shut jonas multitude sick i spake grace. (LSTM model score: 3.3393307659144368e-62)
+
+Input (No Fear): just remind me never to drink from your glass after you.
+Original Shakespeare: but, whilst I live, forget to drink after thee.
+NLTK synonyms, unigram frequency model: barely cue me ne'er to pledge from your glass afterwards you. (LSTM model score: 2.0846118431904244e-37)
+NLTK synonyms, Bigram translation: barely prompt me never to swallow from your ice later you. (LSTM model score: 5.612866428909732e-26)
+NLTK synonyms, Language Model translation: but prompt me never to wassail from your ice later you. (LSTM model score: 5.965592161113874e-16)
+Word Vector synonyms, unigram frequency model: judge remind him neer unto eat beyond my lip afore you. (LSTM model score: 6.3481454709218826e-65)
+Word Vector synonyms, Bigram translation: worship remind yourself still will buy until yours aspect before you. (LSTM model score: 1.1786672157150593e-61)
+Word Vector synonyms, Language Model translation: true remind you still will buy until their aspect before you. (LSTM model score: 9.485991432922036e-39)
+
+Input (No Fear): I’d hate for this to be true.
+Original Shakespeare: I would not have it so.
+NLTK synonyms, unigram frequency model: I’d hatred for this to equal true. (LSTM model score: 2.619344328059328e-29)
+NLTK synonyms, Bigram translation: I’d detest for this to follow true. (LSTM model score: 1.8815221850581345e-27)
+NLTK synonyms, Language Model translation: I’d hate for this to be true. (LSTM model score: 7.05199000602403e-35)
+Word Vector synonyms, unigram frequency model: I’d trust because a unto bee true. (LSTM model score: 1.5671561321732143e-38)
+Word Vector synonyms, Bigram translation: I’d forsake also trouble will continue true. (LSTM model score: 4.1632209371369425e-61)
+Word Vector synonyms, Language Model translation: I’d despise also a again abide true. (LSTM model score: 2.9856200078820726e-53)
+
+Input (No Fear): If you trust what they say, you might be on your way to becoming king
+Original Shakespeare: That, trusted home, Might yet enkindle you unto the crown,
+NLTK synonyms, unigram frequency model: If you believe what they say, you might equal on your path to turn queen (LSTM model score: 2.4364596222054364e-47)
+NLTK synonyms, Bigram translation: If you bank what they say, you mightiness exist along your style to comely power (LSTM model score: 5.957212559056927e-51)
+NLTK synonyms, Language Model translation: If you confidence what they say, you might be along your direction to become baron (LSTM model score: 1.354292096602468e-61)
+Word Vector synonyms, unigram frequency model: If ye beg wherefore we say, ye should bee upon my place unto expressing prince (LSTM model score: 1.3123367748495561e-52)
+Word Vector synonyms, Bigram translation: If yourself wish something i say, we shall continue off their city will incor governor (LSTM model score: 9.561244679490765e-65)
+Word Vector synonyms, Language Model translation: If lordship beg best i say, em can abide behind his adventure again alteration bishop (LSTM model score: 5.791722178132223e-89)
+
